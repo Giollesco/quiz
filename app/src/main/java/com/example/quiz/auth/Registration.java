@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quiz.Home;
+import com.example.quiz.menu.Home;
 import com.example.quiz.R;
-import com.example.quiz.models.RegistrationUser;
+import com.example.quiz.models.RegistrationForm;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -104,11 +104,14 @@ public class Registration extends AppCompatActivity {
         }
 
         // If all validations pass, proceed with registration
-        RegistrationUser currentUser = new RegistrationUser(name, email, password, false);
+        RegistrationForm currentUser = new RegistrationForm(name, email, password, 0, false);
         auth.createUserWithEmailAndPassword(currentUser.email, currentUser.password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    // Reset fields
+                    emailTxt.setText("");
+                    passwordTxt.setText("");
                     // Add user to realtime database
                     FirebaseUser user = auth.getCurrentUser();
                     if (user != null) {
