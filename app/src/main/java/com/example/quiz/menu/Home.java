@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.quiz.R;
 import com.example.quiz.game.Game;
 import com.example.quiz.models.User;
+import com.example.quiz.ranking.Ranking;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +39,8 @@ public class Home extends AppCompatActivity {
 
         TextView username = findViewById(R.id.home_page_username);
         TextView points = findViewById(R.id.home_page_points);
-        ConstraintLayout button = findViewById(R.id.home_page_play_quiz_button);
+        ConstraintLayout gameButton = findViewById(R.id.home_page_play_quiz_button);
+        ConstraintLayout rankingButton = findViewById(R.id.home_page_ranking_button);
 
         // User data fetch
         if(loggedUser != null){
@@ -64,5 +66,22 @@ public class Home extends AppCompatActivity {
             });
         }
 
+        // Play quiz navigation
+        gameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, Game.class);
+                startActivity(intent);
+            }
+        });
+
+        // Ranking navigation
+        rankingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, Ranking.class);
+                startActivity(intent);
+            }
+        });
     }
 }
