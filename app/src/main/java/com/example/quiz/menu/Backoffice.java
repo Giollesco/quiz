@@ -14,6 +14,7 @@ import com.example.quiz.R;
 import com.example.quiz.auth.Login;
 import com.example.quiz.game.Game;
 import com.example.quiz.models.User;
+import com.example.quiz.questions.Questions;
 import com.example.quiz.ranking.Ranking;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Home extends AppCompatActivity {
+public class Backoffice extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseUser loggedUser;
@@ -32,17 +33,16 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_backoffice);
 
         this.auth = FirebaseAuth.getInstance();
         this.loggedUser = this.auth.getCurrentUser();
         this.db = FirebaseDatabase.getInstance().getReference();
 
-        TextView username = findViewById(R.id.home_page_username);
-        TextView points = findViewById(R.id.home_page_points);
-        TextView logoutButton = findViewById(R.id.home_logout_button);
-        ConstraintLayout gameButton = findViewById(R.id.home_page_play_quiz_button);
-        ConstraintLayout rankingButton = findViewById(R.id.home_page_ranking_button);
+        TextView username = findViewById(R.id.backoffice_username);
+        TextView logoutButton = findViewById(R.id.backoffice_logout_button);
+        ConstraintLayout questionsButton = findViewById(R.id.backoffice_questions_button);
+        ConstraintLayout rankingButton = findViewById(R.id.backoffice_ranking_button);
 
         // User data fetch
         if(loggedUser != null){
@@ -54,7 +54,6 @@ public class Home extends AppCompatActivity {
                             User currentUser = task.getResult().getValue(User.class);
                             if (currentUser != null) {
                                 username.setText(currentUser.name.toString());
-                                points.setText(currentUser.points.toString());
                             }
                         }
                         catch (NullPointerException e){
@@ -65,11 +64,11 @@ public class Home extends AppCompatActivity {
             });
         }
 
-        // Play quiz navigation
-        gameButton.setOnClickListener(new View.OnClickListener() {
+        questionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Game.class);
+                auth.signOut();
+                Intent intent = new Intent(Backoffice.this, Questions.class);
                 startActivity(intent);
             }
         });
@@ -78,7 +77,7 @@ public class Home extends AppCompatActivity {
         rankingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Ranking.class);
+                Intent intent = new Intent(Backoffice.this, Ranking.class);
                 startActivity(intent);
             }
         });
@@ -88,7 +87,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 auth.signOut();
-                Intent intent = new Intent(Home.this, Login.class);
+                Intent intent = new Intent(Backoffice.this, Login.class);
                 startActivity(intent);
             }
         });

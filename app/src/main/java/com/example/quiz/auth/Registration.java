@@ -109,6 +109,9 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    // Reset fields
+                    emailTxt.setText("");
+                    passwordTxt.setText("");
                     // Add user to realtime database
                     FirebaseUser user = auth.getCurrentUser();
                     if (user != null) {
