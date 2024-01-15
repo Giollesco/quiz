@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.quiz.R;
+import com.example.quiz.auth.Login;
 import com.example.quiz.game.Game;
 import com.example.quiz.models.User;
+import com.example.quiz.questions.Questions;
 import com.example.quiz.ranking.Ranking;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +40,7 @@ public class Backoffice extends AppCompatActivity {
         this.db = FirebaseDatabase.getInstance().getReference();
 
         TextView username = findViewById(R.id.backoffice_username);
+        TextView logoutButton = findViewById(R.id.backoffice_logout_button);
         ConstraintLayout questionsButton = findViewById(R.id.backoffice_questions_button);
         ConstraintLayout rankingButton = findViewById(R.id.backoffice_ranking_button);
 
@@ -57,11 +60,36 @@ public class Backoffice extends AppCompatActivity {
                             Log.e("NoData", e.getMessage());
                         }
                     }
-                    else {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    }
                 }
             });
         }
+
+        questionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(Backoffice.this, Questions.class);
+                startActivity(intent);
+            }
+        });
+
+        // Ranking navigation
+        rankingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Backoffice.this, Ranking.class);
+                startActivity(intent);
+            }
+        });
+
+        // Logout
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(Backoffice.this, Login.class);
+                startActivity(intent);
+            }
+        });
     }
 }

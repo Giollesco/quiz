@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.quiz.R;
+import com.example.quiz.auth.Login;
 import com.example.quiz.game.Game;
 import com.example.quiz.models.User;
 import com.example.quiz.ranking.Ranking;
@@ -39,6 +40,7 @@ public class Home extends AppCompatActivity {
 
         TextView username = findViewById(R.id.home_page_username);
         TextView points = findViewById(R.id.home_page_points);
+        TextView logoutButton = findViewById(R.id.home_logout_button);
         ConstraintLayout gameButton = findViewById(R.id.home_page_play_quiz_button);
         ConstraintLayout rankingButton = findViewById(R.id.home_page_ranking_button);
 
@@ -59,9 +61,6 @@ public class Home extends AppCompatActivity {
                             Log.e("NoData", e.getMessage());
                         }
                     }
-                    else {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    }
                 }
             });
         }
@@ -80,6 +79,16 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home.this, Ranking.class);
+                startActivity(intent);
+            }
+        });
+
+        // Logout
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(Home.this, Login.class);
                 startActivity(intent);
             }
         });
