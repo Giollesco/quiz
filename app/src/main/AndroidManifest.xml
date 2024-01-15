@@ -13,29 +13,26 @@
         android:theme="@style/Theme.Quiz"
         tools:targetApi="31">
         <activity
+            android:name=".ranking.Ranking"
+            android:exported="false" />
+        <activity
+            android:name=".game.Game"
+            android:exported="false" />
+        <activity
             android:name=".auth.Registration"
             android:exported="false"
-            android:launchMode="singleInstance"
-            />
+            android:launchMode="singleInstance" />
         <activity
-            android:name=".Home"
+            android:name=".menu.Home"
             android:exported="false" />
         <activity
             android:name=".auth.Login"
             android:exported="true"
-            android:launchMode="singleInstance"
-            >
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 

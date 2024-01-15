@@ -1,14 +1,16 @@
-package com.example.quiz;
+package com.example.quiz.game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Home extends AppCompatActivity {
+import com.example.quiz.R;
+
+public class Game extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_game);
     }
 }
