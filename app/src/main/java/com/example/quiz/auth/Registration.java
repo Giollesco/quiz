@@ -110,6 +110,7 @@ public class Registration extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     // Reset fields
+                    nameTxt.setText("");
                     emailTxt.setText("");
                     passwordTxt.setText("");
                     // Add user to realtime database
