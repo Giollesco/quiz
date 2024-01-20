@@ -150,8 +150,8 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
         <!-- Row 1, Column 1 -->
-        <Button
-            android:id="@+id/button_1"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/game_option_a"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_rowWeight="1"
@@ -159,11 +159,14 @@
             android:layout_gravity="fill"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/game_button"
-            android:text="Button 1" />
+            android:background="@drawable/game_button_inactive_style"
+            android:text="A"
+            android:textAllCaps="false"
+            android:textColor="@color/light_gray" />
 
         <!-- Row 1, Column 2 -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/game_option_b"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_rowWeight="1"
@@ -171,30 +174,38 @@
             android:layout_gravity="fill"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/game_button"
-            android:text="Button 2" />
+            android:background="@drawable/game_button_inactive_style"
+            android:text="B"
+            android:textAllCaps="false"
+            android:textColor="@color/light_gray" />
 
         <!-- Row 2, Column 1 -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/game_option_c"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_marginRight="10dp"
-            android:background="@drawable/game_button"
-            android:text="Button 3" />
+            android:background="@drawable/game_button_inactive_style"
+            android:text="C"
+            android:textAllCaps="false"
+            android:textColor="@color/light_gray" />
 
         <!-- Row 2, Column 2 -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/game_option_d"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/game_button"
-            android:text="Button 4" />
+            android:background="@drawable/game_button_inactive_style"
+            android:text="D"
+            android:textAllCaps="false"
+            android:textColor="@color/light_gray" />
 
     </GridLayout>
 
