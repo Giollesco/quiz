@@ -133,11 +133,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/game_divider"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
     <GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
@@ -146,8 +157,9 @@
         android:columnOrderPreserved="false"
         android:rowCount="2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/game_divider">
 
         <!-- Row 1, Column 1 -->
         <androidx.appcompat.widget.AppCompatButton
@@ -160,6 +172,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/game_button_inactive_style"
+            android:fontFamily="@font/poppins_medium"
             android:text="A"
             android:textAllCaps="false"
             android:textColor="@color/light_gray" />
@@ -175,6 +188,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/game_button_inactive_style"
+            android:fontFamily="@font/poppins_medium"
             android:text="B"
             android:textAllCaps="false"
             android:textColor="@color/light_gray" />
@@ -189,6 +203,7 @@
             android:layout_gravity="fill"
             android:layout_marginRight="10dp"
             android:background="@drawable/game_button_inactive_style"
+            android:fontFamily="@font/poppins_medium"
             android:text="C"
             android:textAllCaps="false"
             android:textColor="@color/light_gray" />
@@ -203,11 +218,22 @@
             android:layout_gravity="fill"
             android:layout_marginLeft="10dp"
             android:background="@drawable/game_button_inactive_style"
+            android:fontFamily="@font/poppins_medium"
             android:text="D"
             android:textAllCaps="false"
             android:textColor="@color/light_gray" />
 
     </GridLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
