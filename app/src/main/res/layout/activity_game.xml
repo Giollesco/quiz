@@ -122,7 +122,6 @@
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="60dp"
             android:fontFamily="@font/playfair_display_bold"
-            android:text="Na kojem je jeziku originalno objavljen Dnevnik Anne Frank?"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="28sp"

@@ -172,7 +172,19 @@ public class Game extends AppCompatActivity {
             if (currentQuestionIndex < shuffledQuestions.size()) {
                 GameQuestion nextQuestion = shuffledQuestions.get(currentQuestionIndex);
                 currentQuestionIndex++;
+
+                // Set question text
                 questionText.setText(nextQuestion.getQuestion());
+                Log.e("Game", "Next question" + nextQuestion.toString());
+
+                // Set answer options for each button
+                allButtons[0].setText(nextQuestion.getOptions().getA().getText());
+                allButtons[1].setText(nextQuestion.getOptions().getB().getText());
+                allButtons[2].setText(nextQuestion.getOptions().getC().getText());
+                allButtons[3].setText(nextQuestion.getOptions().getD().getText());
+
+
+                // Update current question index
                 currentQuestionIndexText.setText(String.valueOf(currentQuestionIndex));
             } else {
                 // Restart the loop from the beginning

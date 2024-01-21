@@ -1,5 +1,7 @@
 package com.example.quiz.models;
 
+import java.util.Map;
+
 public class GameQuestion {
     private String question;
     private Options options;
@@ -85,5 +87,31 @@ public class GameQuestion {
         public void setText(String text) {
             this.text = text;
         }
+    }
+
+    // Method to parse GameQuestion from Map (Firebase)
+    public static GameQuestion fromMap(Map<String, Object> map) {
+        GameQuestion question = new GameQuestion();
+        question.setQuestion((String) map.get("question"));
+        question.setOptions(parseOptions((Map<String, Map<String, Object>>) map.get("options")));
+        return question;
+    }
+
+    // Method to parse Options from Map
+    private static Options parseOptions(Map<String, Map<String, Object>> optionsMap) {
+        Options options = new Options();
+        options.setA(parseOption(optionsMap.get("a")));
+        options.setB(parseOption(optionsMap.get("b")));
+        options.setC(parseOption(optionsMap.get("c")));
+        options.setD(parseOption(optionsMap.get("d")));
+        return options;
+    }
+
+    // Method to parse Option from Map
+    private static Option parseOption(Map<String, Object> optionMap) {
+        Option option = new Option();
+        option.setCorrect((Boolean) optionMap.get("isCorrect"));
+        option.setText((String) optionMap.get("text"));
+        return option;
     }
 }
