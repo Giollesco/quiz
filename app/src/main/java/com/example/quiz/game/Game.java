@@ -25,19 +25,19 @@ import com.google.firebase.database.GenericTypeIndicator;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class Game extends AppCompatActivity {
     private DatabaseReference db;
     private GameQuestion[] questions;
     private TextView questionText;
+    private GameQuestion nextQuestion;
     private TextView currentQuestionIndexText;
     private TextView totalNumOfQuestionsText;
+    private int currentQuestionIndex = 0;
+    private List<GameQuestion> shuffledQuestions;
     private Button[] allButtons;
     private Button selectedButton;
     private GameState gameState = GameState.IDLE;
-    private int currentQuestionIndex = 0;
-    private List<GameQuestion> shuffledQuestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,18 @@ public class Game extends AppCompatActivity {
 
     public void onConfirmationSheetButtonClick() {
         if (gameState == GameState.PENDING_CONFIRMATION) {
-            changeButtonState(selectedButton, GameButtonState.CORRECT);
+            boolean isCorrect = checkAnswer(selectedButton);
+            if (isCorrect) {
+                changeButtonState(selectedButton, GameButtonState.CORRECT);
+            } else {
+                // Find the correct button and change its state to CORRECT
+                int correctButtonIndex = findCorrectButtonIndex();
+                if (correctButtonIndex != -1) {
+                    Button correctButton = allButtons[correctButtonIndex];
+                    changeButtonState(correctButton, GameButtonState.CORRECT);
+                }
+                changeButtonState(selectedButton, GameButtonState.INCORRECT);
+            }
             updateTextInFragment("Sljedeće pitanje");
             gameState = GameState.PENDING_NEXT_QUESTION;
         } else if (gameState == GameState.PENDING_NEXT_QUESTION) {
@@ -168,9 +179,15 @@ public class Game extends AppCompatActivity {
     }
 
     private void showNextQuestion() {
+        // Reset all buttons to their default state
+        if(allButtons != null && allButtons.length > 0){
+            for (Button button : allButtons) {
+                changeButtonState(button, GameButtonState.INACTIVE);
+            }
+        }
         if (shuffledQuestions != null && !shuffledQuestions.isEmpty()) {
             if (currentQuestionIndex < shuffledQuestions.size()) {
-                GameQuestion nextQuestion = shuffledQuestions.get(currentQuestionIndex);
+                nextQuestion = shuffledQuestions.get(currentQuestionIndex);
                 currentQuestionIndex++;
 
                 // Set question text
@@ -211,6 +228,14 @@ public class Game extends AppCompatActivity {
 
                         if (questionsList != null) {
                             questions = questionsList.toArray(new GameQuestion[0]);
+                            for (GameQuestion question : questions) {
+                                Log.d("Fetch","Question: " + question.getQuestion());
+                                Log.d("Fetch","Option A: " + question.getOptions().getA().getText() + ", isCorrect: " + question.getOptions().getA().isCorrect());
+                                Log.d("Fetch","Option B: " + question.getOptions().getB().getText() + ", isCorrect: " + question.getOptions().getB().isCorrect());
+                                Log.d("Fetch","Option C: " + question.getOptions().getC().getText() + ", isCorrect: " + question.getOptions().getC().isCorrect());
+                                Log.d("Fetch","Option D: " + question.getOptions().getD().getText() + ", isCorrect: " + question.getOptions().getD().isCorrect());
+                                // Repeat similar lines for other options
+                            }
                             // Shuffle the questions
                             shuffleQuestions();
                             // Initial setup
@@ -232,5 +257,44 @@ public class Game extends AppCompatActivity {
         });
     }
 
+    private String getSelectedAnswerText(Button selectedButton) {
+        return selectedButton.getText().toString();
+    }
 
+    // Method to find the index of the correct button
+    private int findCorrectButtonIndex() {
+        if (nextQuestion != null && nextQuestion.getOptions() != null) {
+            GameQuestion.Options options = nextQuestion.getOptions();
+            if (options.getA().isCorrect()) return 0;
+            if (options.getB().isCorrect()) return 1;
+            if (options.getC().isCorrect()) return 2;
+            if (options.getD().isCorrect()) return 3;
+        }
+        return -1; // Return -1 if no correct button found
+    }
+
+    private boolean checkAnswer(Button selectedButton) {
+        // Identify which option (A, B, C, D) corresponds to the selectedButton
+        int selectedOptionIndex = -1;
+        for (int i = 0; i < allButtons.length; i++) {
+            if (allButtons[i] == selectedButton) {
+                selectedOptionIndex = i;
+                break;
+            }
+        }
+        // Check if the selected option is correct
+        if (selectedOptionIndex != -1) {
+            switch (selectedOptionIndex) {
+                case 0:
+                    return nextQuestion.getOptions().getA().isCorrect();
+                case 1:
+                    return nextQuestion.getOptions().getB().isCorrect();
+                case 2:
+                    return nextQuestion.getOptions().getC().isCorrect();
+                case 3:
+                    return nextQuestion.getOptions().getD().isCorrect();
+            }
+        }
+        return false;
+    }
 }

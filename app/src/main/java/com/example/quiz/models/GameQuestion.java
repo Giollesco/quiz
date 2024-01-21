@@ -1,5 +1,7 @@
 package com.example.quiz.models;
 
+import com.google.firebase.database.PropertyName;
+
 import java.util.Map;
 
 public class GameQuestion {
@@ -69,9 +71,11 @@ public class GameQuestion {
 
     // Inner class representing an option
     public static class Option {
+        @PropertyName("isCorrect")
         private boolean isCorrect;
-        private String text;
 
+        private String text;
+        @PropertyName("isCorrect")
         public boolean isCorrect() {
             return isCorrect;
         }
@@ -79,7 +83,6 @@ public class GameQuestion {
         public void setCorrect(boolean correct) {
             isCorrect = correct;
         }
-
         public String getText() {
             return text;
         }
