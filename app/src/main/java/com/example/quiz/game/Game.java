@@ -1,30 +1,43 @@
 package com.example.quiz.game;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.quiz.R;
 import com.example.quiz.models.GameButtonState;
+import com.example.quiz.models.GameState;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Game extends AppCompatActivity {
+    private DatabaseReference db;
     private ConfirmationSheet confirmationSheetFragment;
     private Button[] allButtons;
     public Button selectedButton;
+    public GameState gameState = GameState.IDLE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        this.db = FirebaseDatabase.getInstance().getReference();
         confirmationSheetFragment = new ConfirmationSheet();
+        ConstraintLayout backButton = findViewById(R.id.game_back_button);
 
-        ConstraintLayout gameButton = findViewById(R.id.game_back_button);
-
-        gameButton.setOnClickListener(new View.OnClickListener() {
+        // Fetching questions
+        fetchQuestions();
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -47,14 +60,17 @@ public class Game extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (Button button : allButtons) {
-                    if (button == clickedButton) {
-                        changeButtonState(button, GameButtonState.IDLE);
-                        selectedButton = button;
-                        showConfirmationSheetFragment();
-                    } else {
-                        // Other buttons, set to INACTIVE state
-                        changeButtonState(button, GameButtonState.INACTIVE);
+                if(gameState != GameState.PENDING_NEXT_QUESTION){
+                    for (Button button : allButtons) {
+                        if (button == clickedButton) {
+                            selectedButton = button;
+                            gameState = GameState.PENDING_CONFIRMATION;
+                            changeButtonState(selectedButton, GameButtonState.IDLE);
+                            showConfirmationSheetFragment();
+                        } else {
+                            // Other buttons, set to INACTIVE state
+                            changeButtonState(button, GameButtonState.INACTIVE);
+                        }
                     }
                 }
             }
@@ -62,14 +78,27 @@ public class Game extends AppCompatActivity {
     }
 
     public void onConfirmationSheetButtonClick() {
-        changeButtonState(selectedButton, GameButtonState.CORRECT);
-        updateTextInFragment("Sljedeće pitanje");
+        if(gameState == GameState.PENDING_CONFIRMATION){
+            changeButtonState(selectedButton, GameButtonState.CORRECT);
+            updateTextInFragment("Sljedeće pitanje");
+            gameState = GameState.PENDING_NEXT_QUESTION;
+        }
+        else if (gameState == GameState.PENDING_NEXT_QUESTION){
+            changeButtonState(selectedButton, GameButtonState.INACTIVE);
+            updateTextInFragment("Sljedeće pitanje");
+            closeConfirmationSheetFragment();
+            gameState = GameState.IDLE;
+        }
+        else{
+            gameState = GameState.PENDING_CONFIRMATION;
+        }
     }
 
     // Method to update the text in the fragment
     public void updateTextInFragment(String newText) {
-        if (confirmationSheetFragment != null) {
-            confirmationSheetFragment.updateText(newText);
+        TextView text = findViewById(R.id.fragment_text);
+        if(text != null){
+            text.setText(newText);
         }
     }
 
@@ -80,6 +109,15 @@ public class Game extends AppCompatActivity {
             transaction.setCustomAnimations(R.anim.slide_up, 0, 0, 0);
             transaction.add(R.id.fragment_container_view, ConfirmationSheet.class, null, ConfirmationSheet.class.getSimpleName());
             transaction.commit();
+        }
+    }
+
+    private void closeConfirmationSheetFragment() {
+        ConfirmationSheet confirmationSheetFragment = (ConfirmationSheet) getSupportFragmentManager().findFragmentByTag(ConfirmationSheet.class.getSimpleName());
+        if (confirmationSheetFragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(0, R.anim.slide_down);
+            transaction.remove(confirmationSheetFragment).commit();
         }
     }
 
@@ -107,5 +145,19 @@ public class Game extends AppCompatActivity {
                 button.setTextColor(getResources().getColor(R.color.black));
                 break;
         }
+    }
+
+    public void fetchQuestions(){
+        db.child("questions").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                }
+            }
+        });
     }
 }

@@ -10,14 +10,12 @@ import com.example.quiz.R;
 
 public class ConfirmationSheet extends Fragment {
 
-    public TextView textView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_confirmation_sheet, container, false);
 
         // Find the Button
         ImageView button = view.findViewById(R.id.confirmation_sheet_button);
-        textView = view.findViewById(R.id.fragment_text);
 
         // Set OnClickListener
         button.setOnClickListener(new View.OnClickListener() {
@@ -30,12 +28,5 @@ public class ConfirmationSheet extends Fragment {
             }
         });
         return view;
-    }
-
-    // Method to update the text
-    public void updateText(String newText) {
-        if (textView != null) {
-            textView.setText(newText);
-        }
     }
 }
