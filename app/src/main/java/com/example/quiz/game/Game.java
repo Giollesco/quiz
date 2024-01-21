@@ -24,14 +24,16 @@ public class Game extends AppCompatActivity {
     private DatabaseReference db;
     private ConfirmationSheet confirmationSheetFragment;
     private Button[] allButtons;
-    public Button selectedButton;
-    public GameState gameState = GameState.IDLE;
+    private Button selectedButton;
+    private GameState gameState = GameState.IDLE;
+    private Number currentQuestion = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        this.db = FirebaseDatabase.getInstance().getReference();
+        this.db = FirebaseDatabase.getInstance().getReference().child("questions");
         confirmationSheetFragment = new ConfirmationSheet();
         ConstraintLayout backButton = findViewById(R.id.game_back_button);
 
@@ -148,7 +150,7 @@ public class Game extends AppCompatActivity {
     }
 
     public void fetchQuestions(){
-        db.child("questions").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        db.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
