@@ -92,7 +92,7 @@
                 android:textSize="14sp" />
 
             <View
-                android:id="@+id/divider"
+                android:id="@+id/login_divider"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider" />
@@ -113,7 +113,7 @@
                 android:textSize="14sp" />
 
             <View
-                android:id="@+id/divider"
+                android:id="@+id/login_divider_2"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider" />
