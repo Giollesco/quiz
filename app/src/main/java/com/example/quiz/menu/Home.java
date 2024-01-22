@@ -39,7 +39,6 @@ public class Home extends AppCompatActivity {
         this.db = FirebaseDatabase.getInstance().getReference();
 
         TextView username = findViewById(R.id.home_page_username);
-        TextView points = findViewById(R.id.home_page_points);
         TextView logoutButton = findViewById(R.id.home_logout_button);
         ConstraintLayout gameButton = findViewById(R.id.home_page_play_quiz_button);
         ConstraintLayout rankingButton = findViewById(R.id.home_page_ranking_button);
@@ -54,7 +53,6 @@ public class Home extends AppCompatActivity {
                             User currentUser = task.getResult().getValue(User.class);
                             if (currentUser != null) {
                                 username.setText(currentUser.name.toString());
-                                points.setText(currentUser.points.toString());
                             }
                         }
                         catch (NullPointerException e){
@@ -93,4 +91,6 @@ public class Home extends AppCompatActivity {
             }
         });
     }
+
+
 }
