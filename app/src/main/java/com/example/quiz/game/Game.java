@@ -15,6 +15,9 @@ import com.example.quiz.R;
 import com.example.quiz.models.GameButtonState;
 import com.example.quiz.models.GameQuestion;
 import com.example.quiz.models.GameState;
+import com.example.quiz.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,9 +30,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Game extends AppCompatActivity {
+
+    FirebaseAuth auth;
+    FirebaseUser loggedUser;
     private DatabaseReference db;
     private GameQuestion[] questions;
     private TextView questionText;
+    private TextView gamePagePoints;
     private GameQuestion nextQuestion;
     private TextView currentQuestionIndexText;
     private TextView totalNumOfQuestionsText;
@@ -38,15 +45,43 @@ public class Game extends AppCompatActivity {
     private Button[] allButtons;
     private Button selectedButton;
     private GameState gameState = GameState.IDLE;
+    private int points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        this.auth = FirebaseAuth.getInstance();
+        this.loggedUser = this.auth.getCurrentUser();
+
+        TextView gamePagePoints = findViewById(R.id.game_page_points);
+
+        // Set this.points to the current user's points
+        if (loggedUser != null) {
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(loggedUser.getUid());
+            db.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()){
+                        try {
+                            User currentUser = task.getResult().getValue(User.class);
+                            if (currentUser != null) {
+                                gamePagePoints.setText(currentUser.points.toString());
+                            }
+                        }
+                        catch (NullPointerException e){
+                            Log.e("NoData", e.getMessage());
+                        }
+                    }
+                }
+            });
+        }
+
         this.db = FirebaseDatabase.getInstance().getReference().child("questions");
         ConfirmationSheet confirmationSheetFragment = new ConfirmationSheet();
         ConstraintLayout backButton = findViewById(R.id.game_back_button);
+
 
         // Fetching questions and setting up
         fetchQuestions();
@@ -99,6 +134,7 @@ public class Game extends AppCompatActivity {
             boolean isCorrect = checkAnswer(selectedButton);
             if (isCorrect) {
                 changeButtonState(selectedButton, GameButtonState.CORRECT);
+                updateUserPoints(10);
             } else {
                 // Find the correct button and change its state to CORRECT
                 int correctButtonIndex = findCorrectButtonIndex();
@@ -107,6 +143,7 @@ public class Game extends AppCompatActivity {
                     changeButtonState(correctButton, GameButtonState.CORRECT);
                 }
                 changeButtonState(selectedButton, GameButtonState.INCORRECT);
+                updateUserPoints(-5);
             }
             updateTextInFragment("Sljedeće pitanje");
             gameState = GameState.PENDING_NEXT_QUESTION;
@@ -288,5 +325,31 @@ public class Game extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void updateUserPoints(int points){
+        if (loggedUser != null) {
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(loggedUser.getUid());
+            db.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()){
+                        try {
+                            User currentUser = task.getResult().getValue(User.class);
+                            if (currentUser != null) {
+                                int currentPoints = Math.toIntExact(currentUser.points);
+                                int newPoints = currentPoints + points;
+                                db.child("points").setValue(newPoints);
+                                gamePagePoints = findViewById(R.id.game_page_points);
+                                gamePagePoints.setText(String.valueOf(newPoints));
+                            }
+                        }
+                        catch (NullPointerException e){
+                            Log.e("NoData", e.getMessage());
+                        }
+                    }
+                }
+            });
+        }
     }
 }
