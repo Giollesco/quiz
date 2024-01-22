@@ -228,14 +228,6 @@ public class Game extends AppCompatActivity {
 
                         if (questionsList != null) {
                             questions = questionsList.toArray(new GameQuestion[0]);
-                            for (GameQuestion question : questions) {
-                                Log.d("Fetch","Question: " + question.getQuestion());
-                                Log.d("Fetch","Option A: " + question.getOptions().getA().getText() + ", isCorrect: " + question.getOptions().getA().isCorrect());
-                                Log.d("Fetch","Option B: " + question.getOptions().getB().getText() + ", isCorrect: " + question.getOptions().getB().isCorrect());
-                                Log.d("Fetch","Option C: " + question.getOptions().getC().getText() + ", isCorrect: " + question.getOptions().getC().isCorrect());
-                                Log.d("Fetch","Option D: " + question.getOptions().getD().getText() + ", isCorrect: " + question.getOptions().getD().isCorrect());
-                                // Repeat similar lines for other options
-                            }
                             // Shuffle the questions
                             shuffleQuestions();
                             // Initial setup
