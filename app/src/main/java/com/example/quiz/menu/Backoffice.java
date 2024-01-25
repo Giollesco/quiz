@@ -41,7 +41,6 @@ public class Backoffice extends AppCompatActivity {
 
         TextView username = findViewById(R.id.backoffice_username);
         TextView logoutButton = findViewById(R.id.backoffice_logout_button);
-        ConstraintLayout questionsButton = findViewById(R.id.backoffice_questions_button);
         ConstraintLayout rankingButton = findViewById(R.id.backoffice_ranking_button);
 
         // User data fetch
@@ -63,15 +62,6 @@ public class Backoffice extends AppCompatActivity {
                 }
             });
         }
-
-        questionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.signOut();
-                Intent intent = new Intent(Backoffice.this, Questions.class);
-                startActivity(intent);
-            }
-        });
 
         // Ranking navigation
         rankingButton.setOnClickListener(new View.OnClickListener() {
