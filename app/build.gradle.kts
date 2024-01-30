@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.quiz"
+    namespace = "com.fsre.quiz_app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.quiz"
+        applicationId = "com.fsre.quiz_app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

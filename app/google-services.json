@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:330841842863:android:acc03bdd10dc534164a05a",
         "android_client_info": {
-          "package_name": "com.example.quiz"
+          "package_name": "com.fsre.quiz_app"
         }
       },
       "oauth_client": [],
